@@ -1,92 +1,177 @@
-# tme4-rsa
+#+title: README
+#+date: <2022-01-19 mar.>
+#+author: Maxime Roméas
+#+language: fr
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 26.3 (Org mode 9.4)
 
+* Utilisation de GitLab
 
+  /Cette section et les suivantes concernant GitLab sont largement inspirées des documents d’Antoine Miné pour le cours 3I002./
 
-## Getting started
+  Pour les TME, vous allez utiliser le logiciel =git= et la plateforme GitLab. Gitlab est un gestionnaire de projets logiciels. =git= est un gestionnaire de versions distribué. GitLab centralise votre projet sur un serveur externe. Il vous permet de garder un historique des modifications (visible avec une interface web), de vous synchroniser avec votre éventuel binôme et de faire le rendu du projet au chargé de TME. Nous y avons ajouté une fonction d’intégration continue : toute propagation des modifications locales vers le serveur GitLab exécutera automatiquement une batterie de tests pour valider votre nouvelle version.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+  Pour mettre en place le projet GitLab des TME, vous devrez suivre les étapes suivantes. Faites attention à bien suivre les étapes dans l'ordre. Addressez-vous au chargé de TME en cas de problème.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+  
+** Vérification de la place disponible (quota)
 
-## Add your files
+   Si une des étapes ci-dessous échoue, cela peut être dû à un manque d’espace sur votre compte. Avant toutes choses, utilisez la commande =quota= dans un terminal pour déterminer si votre compte dispose d’espace disponible. En particulier, si la première colonne (=blocks=) est égale à la colonne (=limit=) et une étoile (=*=) apparaît, il ne reste plus de place sur le disque ; vous devez absolument libérer de l’espace avant de continuer.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+** Connexion au GitLab
 
-```
-cd existing_repo
-git remote add origin https://stl.algo-prog.info/crypto-2023/tme4-rsa.git
-git branch -M main
-git push -uf origin main
-```
+   Normalement, vous avez du recevoir un email du serveur vous précisant les informations de connexion. Si vous n’avez pas reçu cet email, prévenez les enseignants. Ne vous inscrivez pas directement sur le serveur, vous n’aurez pas alors automatiquement accès aux projets des TME du cours.
 
-## Integrate with your tools
+   Votre /username/ pour la connexion est votre numéro d’étudiant. Lors de votre première connexion, vous devrez choisir un mot de passe.
 
-- [ ] [Set up project integrations](https://stl.algo-prog.info/crypto-2023/tme4-rsa/-/settings/integrations)
+** Configuration du proxy de navigation (valable uniquement à la PPTI)
 
-## Collaborate with your team
+   Si la page web du serveur GitLab n’est pas accessible, vous devez configurer le proxy (serveur mandataire) de votre navigateur. Choisissez, pour les protocoles HTTP et HTTPS, le serveur =proxy.ufr-info-p6.jussieu.fr= et le numéro de port 3128.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+** Configuration du proxy pour =git= (valable uniquement à la PPTI)
 
-## Test and Deploy
+   Afin d'éviter les erreurs d'authentification, vous devez ouvrir un terminal et y taper les commandes suivantes :
 
-Use the built-in continuous integration in GitLab.
+   #+begin_src shell
+     git config --global http.sslVerify false
+     git config --global http.proxy http://proxy.ufr-info-p6.jussieu.fr:3128
+     git config --global https.proxy https://proxy.ufr-info-p6.jussieu.fr:3128
+   #+end_src
+   
+   
+** Configuration des notifications de GitLab
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+   Il peut être utile de réduire les notifications envoyées par email. Pour cela, dans le menu =Settings= de GitLab, choisissez l’option =Notifications=, ouvrez le menu =Global notification level= et cliquez sur =Custom=. Une liste apparaît, et vous pouvez désélectionner certaines notifications. Nous conseillons en particulier de désélectionner =Failed pipeline= pour éviter d’être submergé de notifications lors de l’intégration continue
 
-***
+   
+** /Fork/ du squelette de projet GitLab
 
-# Editing this README
+   Vous êtes automatiquement membre du groupe =CRYPTO-2023=. Ce groupe contient les projets pour chaque TME, auxquels vous pouvez accéder en lecture seule. Chaque projet est un squelette que vous allez compléter. Il fournit quelques sources : exemples, tests, interfaces, etc. Pour réaliser le TME et compléter ce projet, vous devez d’abord en faire *une copie* (fork) qui sera *privée* à votre binôme et vous et sur laquelle vous allez travailler.
+   
+*Note* : assurez-vous que votre fenêtre de navigateur occupe tout l’écran. Si la fenêtre est trop petite, certains menus de GitLab sont remplacés par des icônes, et vous ne trouverez plus les noms des menus tels qu’indiqués dans la suite de l’énoncé.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Pour chaque binôme, *un seul d’entre vous* devra faire un /fork/ de ce squelette de projet, puis y ajouter son camarade de binôme, et ainsi partager le projet sous GitLab. Pour cela :
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+  - Dans l’onglet =Projects > Your projects=, sélectionnez le projet =CRYPTO-2023/TME= (où =TME= correspond au nom du projet du TME en cours), cliquez sur le bouton =Fork= puis cliquez sur votre nom. Ceci crée le projet personnel privé nommé =username/TME= (où =username= est votre numéro d’étudiant). Vous travaillerez désormais dans ce projet, où vous avez les droits d’écriture.
+  - Dans l’onglet =Projects > Your projects=, sélectionnez ce projet privé. Il doit avoir pour nom =username/TME= et porter la mention =Forked from CRYPTO-2023/TME=. Cliquez sur =Settings= dans le menu de gauche, puis =Members=. *Invitez votre binôme* en lui donnant pour rôle =Maintainer=.
 
-## Name
-Choose a self-explaining name for your project.
+    Si c’est votre binôme qui a créé le projet et vous y a ajouté avec les bons droits, vous devriez le trouver dans l’onglet =Projects > Your projects= sous le nom =partnername/TME= où =partnername= est le numéro d’étudiant de votre binôme.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+** Ajout du chargé de TME à votre projet GitLab
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+   Dans votre projet personnel sur GitLab, =username/TME=, invitez également votre chargé TME avec le rôle =Maintainer= (même procédure que ci-dessus). Si vous n’ajoutez pas votre chargé de TME, celui-ci ne pourra pas suivre l’avancement de votre travail, ni vous donner une note le cas échéant.
+   
+** Faire une copie locale de votre projet
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+   Pour travailler sur votre projet, vous devez effectuer une copie locale sur votre machine. Tous les membres du projet peuvent faire une copie locale. Ensuite, vous devez régulièrement synchroniser la version sur le serveur avec le travail que vous avez effectué localement. Cela vous permet à plusieurs personnes de travailler simultanément, sur des ordinateurs différents, et de partager et d’échanger les sources développées.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+   Pour effectuer une copie locale de votre projet, vous devez d’abord récupérer l’adresse du projet. Vous la trouverez sur la page GitLab de votre projet, en cliquant sur l’icône =Clone= à côté du bouton =Fork=. Copiez la chaîne de caractères sous =Clone with HTTPS=.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+   *Prenez garde* à bien importer votre projet de binôme, =username/TME=, et pas =CRYPTO-2023/TME=. Vous ne pourrez pas travailler dans ce dernier, qui est en lecture seule.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+   Utilisez votre terminal pour vous rendre dans le repertoire où vous souhaitez copier le projet. Puis entrez la commande =git clone adresse-du-projet=, où =adresse-du-projet= est l’adresse que vous avez récupérée.
+   
+Vous devez entrer un nom d’utilisateur et le mot de passe associé. Le nom d’utilisateur est votre username sur le serveur GitLab, c’est-à-dire votre numéro d’étudiant (i.e., la personne qui fait l’import, pas forcément la personne qui a fait le /fork/) ; le mot de passe est celui que vous avez choisi en vous connectant au serveur GitLab la première fois.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Cette action va créer un répertoire =TME= contenant votre copie locale du projet.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Ne modifiez pas les fichiers =test-*.py= qui servent de tests automatiques.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Vous pouvez désormais commencer à travailler sur votre copie locale du projet.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+** Synchronisation avec le serveur GitLab
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+   Après avoir exécuté =git clone= en début de TME, nous avons travaillé sur une copie locale du projet. Il est nécessaire de synchroniser périodiquement votre projet local avec le projet GitLab pour :
+   
+   - communiquer vos fichiers à l’enseignant pour le rendu (celui-ci a accès aux fichiers sous GitLab, mais pas à ceux sur votre compte local),
+   - vous synchroniser avec votre binôme,
+   - éventuellement synchroniser des copies locales sur plusieurs ordinateurs,
+   - garder une trace des modifications et pouvoir éventuellement revenir à une version précédente en cas d’erreur.
 
-## License
-For open source projects, say how it is licensed.
+   Les opérations utiles sont donc la propagation d’une copie locale vers le serveur (/push/) et depuis le serveur vers une copie locale (/pull/).
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Vous pouvez consulter l’état des fichiers sur le serveur GitLab en utilisant le site web [[https://stl.algo-prog.info]]. Vous y trouverez la dernière version des fichiers et l’historique des modifications. Vous pourrez en particulier vérifier que le projet a bien été synchronisé pour le rendu de TME.
+
+** =git= en ligne de commande
+
+   Dans un terminal, placez-vous dans le répertoire =TME= contenant votre projet. Les commandes les plus utiles sont :
+   - =git status= pour connaître l’état actuel de vos fichiers, en particulier ce qui a été modifié depuis la dernière synchronisation avec le serveur ;
+   - =git add fichiers= pour indiquer les fichiers ajoutés ou modifiés localement ;
+   - =git commit -m "mon message"= pour enregistrer localement les ajouts ou modifications des fichiers spécifiés par =git add=, où /mon message/ est un commentaire de votre part qui spécifie les modifications ;
+   - =git push= pour effectivement propager l’enregistrement local vers le serveur ;
+   - =git pull= pour rapatrier localement les modifications depuis le serveur.
+
+   Si c'est la première fois que vous utilisez =git=, il faudra lancer les commandes suivantes afin de renseigner votre nom et votre mail pour vos futurs commits :
+   #+begin_src shell
+          git config --global user.email "prenom.nom@toto.com"
+          git config --global user.name "Votre Nom"
+   #+end_src
+
+   Le système =git= est décrit dans le livre en ligne : [[https://git-scm.com/book/en/v2]].
+
+** Bonnes pratiques
+
+   C’est une bonne idée d’anticiper les conflits en *commençant toute session de travail par un pull*, pour repartir avec les dernières versions des fichiers disponibles sur le serveur, et en *terminant toute session de travail par un push*, pour que vos modifications locales soient envoyées sur le serveur et puissent être importées par votre binôme ou vous-même sur un autre ordinateur.
+
+** Gestion des conflits
+
+   Si des modifications ont été faites sur le serveur (par exemple par une propagation, =push=, de votre camarade) depuis votre dernier =pull=, vous ne pourrez pas propager vos modifications locales directement ; =git= refusera avec une erreur.
+
+   En effet, cela provoquerait des conflits entre deux nouvelles versions d’un fichier. =git= vous force à résoudre les conflits localement, avant de propager vos fichiers corrigés vers le serveur :
+
+   — Faites d’abord un =pull=.
+   — =git= s’efforce de fusionner les modifications locales avec celles présentes sur le serveur, mais il a pu faire des erreurs ; vous devez examiner chaque fichier et corriger à la main les problèmes causés par la fusion. Les zones non fusionnées sont identifiées par des balises =<<<<<<=, =------= et =>>>>>>= dans votre source Python. =git= vous indique de cette manière les deux versions disponibles (version locale et dernière version disponible sur le serveur). Il s’agit souvent de choisir une de deux versions, en supprimant les lignes redondantes et les balises.
+   — Après suppression de tous les conflits, vous devez faire un =commit= avec les fichiers concernés.
+   — Vous pouvez enfin faire un =push=.
+
+** Tests et intégration continue sous GitLab
+
+   L’intégration continue est une pratique de développement logiciel consistant à s’assurer que, à chaque instant, le dépôt est correct et passe tous les tests. Le serveur GitLab est configuré pour l’intégration continue : *après chaque propagation de votre copie locale vers le serveur (push), des tests sont exécutés automatiquement.*
+
+   Vous pouvez consulter le résultat des tests sur le serveur GitLab https://stl.algo-prog.info en cliquant sur votre projet, puis dans le menu à gauche sur =CI / CD > pipelines=. Les tests de la dernière version apparaissent en haut. Un icône « V » vert ou une croix rouge indique l’état du test (un croissant ou un symbole pause indique que le test est en cours ou en attente, il faut donc patienter). Cliquer sur l’icône dans la colonne =Status= permet de voir l’ensemble des classes de test. Cliquer sur un nom de test vous donne un rapport complet de test, indiquant en particulier quelles méthodes de test ont échoué, et avec quelles erreurs.
+
+   Le chargé de TME a accès aux rapports de tests sur le serveur GitLab, ce qui lui permet d’évaluer votre rendu de TME.
+
+   Le serveur est configuré pour exécuter tous les tests du TME. *Tant que vous n’avez pas programmé toutes les fonctions demandées, de nombreux tests vont échouer. Vous ignorerez donc au départ les tests liés aux questions que vous n’avez pas encore traitées.*
+
+   Vous pouvez effectuer les tests au niveau local, avant de propager votre version du projet. Pour lancer les tests localement il suffit d’utiliser la commande =./test-all.sh=. Vous pouvez également executer chaque test séparément avec la commande =python test-N-*.py= où $N$ est le numéro du test que vous souhaitez effectuer.
+
+   *Nous vous recommandons d’effectuer les tests au niveau local avant de propager votre version du projet, afin de vous assurer qu’il ne reste pas d’erreurs.*
+
+** Rendu du TME
+
+   Compte tenu des conditions particulières d'enseignement ce semestre, nous vous demandons de rendre régulièrement votre travail afin que vos enseignants puissent suivre votre avancement. De plus, un des TME sera noté et comptera dans le contrôle continu, il sera impératif de soumettre votre travail afin que vous puissiez être évalués.
+
+   Chaque semaine, il est obligatoire de rendre le TME à votre chargé de TME en fin de la séance. Si vous le souhaitez, vous pouvez aussi rendre *une seconde version améliorée avant le début du TME suivant.*
+
+   Le rendu se fait en propageant vos modifications vers le serveur GitLab, comme indiqué plus haut, et, idéalement, en y associant un /tag/ pour que vous et vos enseignants puissiez mieux vous y retrouver. Pour cela :
+   — Connectez-vous sur la page de votre projet sous https://stl.algo-prog.info.
+   — Assurez-vous que votre chargé de TME est membre de votre projet, avec le rôle =Maintainer=.
+   — Vérifiez que toutes les classes demandées sont bien présentes sous GitLab et bien synchronisées avec le projet local.
+   — Vérifiez également que les tests unitaires du TME lancés par l’intégration continue sur le serveur GitLab se sont exécutés correctement.
+   — Dans le menu de gauche, sélectionnez =Repository > Tags= et cliquez sur =New Tag=.
+   — Donnez un nom à votre /tag/ : « rendu-fin-seance1 » ou « rendu-apres-seance1 », selon qu’il s’agit d’un rendu partiel en fin de la séance 1 ou bien d’un rendu du TME plus tard dans la semaine.
+   — Cliquez sur =Create tag=.
+   — En cas d’erreur, il est toujours possible de créer un nouveau tag. Pensez à donner un nom explicite.
+
+   *Il est fortement recommandé de créer un tag pour chaque rendu, et de réaliser au moins un rendu par séance.*
+
+** Mettre à jour sa version du TME
+
+   Si un ou plusieurs fichiers du TME venaient à être modifiés (par exemple à cause de bugs dans le code ou les tests, ...) vous pourrez mettre à jour votre projet de TME sans perdre votre travail en effectuant les commandes suivantes.
+
+   Pour la première commande, qui suit, il n'est utile de la lancer qu'une seule fois. Vous n'aurez donc pas à la refaire à chaque modification du sujet de TME.
+
+   #+begin_src shell
+     # Seulement la première fois
+     git remote add upstream https://stl.algo-prog.info/crypto-2023/tme4-rsa
+   #+end_src
+
+   Pour les suivantes, elles devront être effectuées à chaque modification du sujet de TME.
+
+   #+begin_src shell
+     # À chaque modification
+     git fetch upstream
+     git merge upstream/master -m "Merge upstream"
+   #+end_src
