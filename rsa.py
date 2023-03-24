@@ -5,9 +5,8 @@ def gcd(a,b):
       a,b = b, a % b
   return a
 
-def xgcd(a,b):
-    """Extended GCD:
-    Returns (gcd, x, y) where gcd = ax+by."""
+def Algo_Euclid(a,b):
+    """Algo Euclid retoun (gcd, x, y) tq gcd = ax+by."""
     prevx, x = 1, 0;  prevy, y = 0, 1
     while b:
         q, r = divmod(a,b)
@@ -17,9 +16,9 @@ def xgcd(a,b):
     return a, prevx, prevy
 
 def invmod(a, m):
-    g, x, _ = xgcd(a, m)
+    g, x, _ = Algo_Euclid(a, m)
     if g!= 1:
-        raise ValueError('a n\'est pas inversible modulo m')
+        raise ValueError('a n\'est pas inversible modulo m aka philemon est con')
     return x % m
 
 def rsa_chiffrement (x,N,e):
@@ -31,7 +30,7 @@ def rsa_dechiffrement (y,p,q,d):
 
 # Retourne s tel que s % n1 == a1 et s % n2 == a2
 def crt2(a1, a2, n1, n2):
-    _, x, y = xgcd(n1, n2)
+    _, x, y = Algo_Euclid(n1, n2)
     m = n1 * n2
     s1 = (a1 * n2 * y + a2 * n1 * x) % m
     s2 = (s1 - a1) * invmod(n1, n2) % n2
