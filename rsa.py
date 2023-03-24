@@ -1,5 +1,4 @@
 import random
-from sympy import *
 
 def gcd(a,b):
   while b != 0:
@@ -77,25 +76,16 @@ def reduite(L):
         yield (ni, di)
 
 
-
-
 def Wiener(m, c, N, e):
+
     cf_expansion = cfrac(e, N)
     convergents = reduite(cf_expansion) 
     
     for pk, pd in convergents: # pk - possible k, pd - possible d
         if pk == 0:
             continue;
-
-        possible_phi = (e*pd - 1)//pk
-
-        p = Symbol('p', integer=True)
-        roots = solve(p**2 + (possible_phi - N - 1)*p + N, p)
-
-        if len(roots) == 2:
-            pp, pq = roots # pp - possible p, pq - possible q
-            if pp*pq == N:
-                return pd
+        if pow(c,pd,N)==m:
+            return pd
 
     print('[-] Wiener\'s Attack failed; Could not factor N')
     return None
