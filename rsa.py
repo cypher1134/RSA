@@ -25,21 +25,33 @@ def rsa_chiffrement (x,N,e):
     return pow(x, e, N)
 
 def rsa_dechiffrement (y,p,q,d):
-    n = p*q
-    return pow(y, d, n)
+    return pow(y, d, p*q)
 
-# Retourne s tel que s % n1 == a1 et s % n2 == a2
+# Retourne s tel que s1 % n1 == a1 et s2 % n2 == a2
 def crt2(a1, a2, n1, n2):
-    _, x, y = Algo_Euclid(n1, n2)
+    '''pour resoudre le systeme d'équation 
+        x ≡ a1 (mod n1)
+        x ≡ a2 (mod n2)'''
+    _, x, y = Algo_Euclid(n1, n2)  #solve x*n1 + y*n2 =1
     m = n1 * n2
-    s1 = (a1 * n2 * y + a2 * n1 * x) % m
-    s2 = (s1 - a1) * invmod(n1, n2) % n2
+    s1 = (a1 * n2 * y + a2 * n1 * x) % m # it is a solution for x ≡ a1 (mod n1)
+    s2 = (s1 - a1) * invmod(n1, n2) % n2 # it is a solution that satisfie bothe equations x ≡ a1 (mod n1) and x ≡ a2 (mod n2)
+    # the final solution for the system is x = s1 - n1 * s2
     return s1, s2
 
 def rsa_dechiffrement_crt(y, p, q, up, uq, dp, dq, N):
-    mp = pow(y, dp, p)
+    '''up = invmod(p,q)
+    uq = invmod(q,p)
+    dp , dq are the private key parameters that dp ≡ d (mod p-1) and dq ≡ d (mod q-1)
+    d : private exponent
+    '''
+    mp = pow(y, dp, p) 
     mq = pow(y, dq, q)
+
+    # s ≡ mp (mod p)
+    # s ≡ mq (mod q)
     s = crt2(mp, mq, p, q)
+    
     return (s * up * q + uq * p) % N
 
 #### Wiener
