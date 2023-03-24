@@ -1,29 +1,108 @@
+import random
+from sympy import *
+
+def gcd(a,b):
+  while b != 0:
+      a,b = b, a % b
+  return a
+
+def xgcd(a,b):
+    """Extended GCD:
+    Returns (gcd, x, y) where gcd = ax+by."""
+    prevx, x = 1, 0;  prevy, y = 0, 1
+    while b:
+        q, r = divmod(a,b)
+        x, prevx = prevx - q*x, x  
+        y, prevy = prevy - q*y, y
+        a, b = b, r
+    return a, prevx, prevy
+
+def invmod(a, m):
+    g, x, _ = xgcd(a, m)
+    if g!= 1:
+        raise ValueError('a n\'est pas inversible modulo m')
+    return x % m
+
 def rsa_chiffrement (x,N,e):
-    return
+    return pow(x, e, N)
 
 def rsa_dechiffrement (y,p,q,d):
-    return
+    n = p*q
+    return pow(y, d, n)
 
 # Retourne s tel que s % n1 == a1 et s % n2 == a2
-def crt2 (a1,a2,n1,n2):
-    return
+def crt2(a1, a2, n1, n2):
+    _, x, y = xgcd(n1, n2)
+    m = n1 * n2
+    s1 = (a1 * n2 * y + a2 * n1 * x) % m
+    s2 = (s1 - a1) * invmod(n1, n2) % n2
+    return s1, s2
 
-def rsa_dechiffrement_crt (y,p,q,up,uq,dp,dq,N):
-    return
+def rsa_dechiffrement_crt(y, p, q, up, uq, dp, dq, N):
+    mp = pow(y, dp, p)
+    mq = pow(y, dq, q)
+    s = crt2(mp, mq, p, q)
+    return (s * up * q + uq * p) % N
 
 #### Wiener
-def cfrac(a,b):
-    return
+def cfrac(a, b):
+    coeffs = []
+    while b != 0:
+        q = a // b
+        r = a % b
+        coeffs.append(q)
+        a = b
+        b = r
+    return coeffs
+
+
 
 def reduite(L):
-    return
+    n = [] # Nominators
+    d = [] # Denominators
 
-def Wiener(m,c,N,e):
-    return
+    for i in range(len(L)):
+        if i == 0:
+            ni = L[i]
+            di = 1
+        elif i == 1:
+            ni = L[i]*L[i-1] + 1
+            di = L[i]
+        else: # i > 1
+            ni = L[i]*n[i-1] + n[i-2]
+            di = L[i]*d[i-1] + d[i-2]
+
+        n.append(ni)
+        d.append(di)
+        yield (ni, di)
+
+
+
+
+def Wiener(m, c, N, e):
+    cf_expansion = cfrac(e, N)
+    convergents = reduite(cf_expansion) 
+    
+    for pk, pd in convergents: # pk - possible k, pd - possible d
+        if pk == 0:
+            continue;
+
+        possible_phi = (e*pd - 1)//pk
+
+        p = Symbol('p', integer=True)
+        roots = solve(p**2 + (possible_phi - N - 1)*p + N, p)
+
+        if len(roots) == 2:
+            pp, pq = roots # pp - possible p, pq - possible q
+            if pp*pq == N:
+                return pd
+
+    print('[-] Wiener\'s Attack failed; Could not factor N')
+    return None
 
 
 ### Generation de premiers
-import random
+
 def is_probable_prime(N, nbases=20):
     """
     True if N is a strong pseudoprime for nbases random bases b < N.
@@ -58,7 +137,7 @@ def is_probable_prime(N, nbases=20):
     if N == 2:
         return True
     for i in range(nbases):
-        import random
+        
         a = random.randint(2, N - 1)
         if miller(a, N):
             return False
